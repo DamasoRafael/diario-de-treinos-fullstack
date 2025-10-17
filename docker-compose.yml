@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  # Serviço do nosso banco de dados PostgreSQL
+  db:
+    image: postgres:latest
+    container_name: db_diario_treinos
+    restart: always
+    environment:
+      - POSTGRES_USER=rafael
+      - POSTGRES_PASSWORD=minhasenhasecreta
+      - POSTGRES_DB=diariotreino
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Serviço da nossa aplicação Front-end React
+  frontend:
+    build:
+      context: ./frontend # Aponta para a pasta do front-end
+      dockerfile: Dockerfile
+    container_name: frontend_diario_treinos
+    restart: always
+    ports:
+      - "3000:80" # Mapeia a porta 3000 do seu PC para a porta 80 do container
+
+volumes:
+  postgres_data:
