@@ -1,0 +1,50 @@
+// Este é o seu arquivo de schema do Prisma.
+// Saiba mais em: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Aponta para o seu arquivo .env
+}
+
+// --- NOSSOS MODELOS DE DADOS COMEÇAM AQUI ---
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  nivel     String   @default("padrao") // "padrao" ou "admin"
+  criadoEm  DateTime @default(now())
+
+  // Relação: Um Usuário pode ter várias Fichas de Treino
+  fichas FichaTreino[]
+}
+
+model FichaTreino {
+  id        Int      @id @default(autoincrement())
+  nomeFicha String
+  criadoEm  DateTime @default(now())
+
+  // Relação: A Ficha pertence a um Usuário
+  usuario   User @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId Int  // Esta é a chave estrangeira
+
+  // Relação: Uma Ficha pode ter vários Exercícios
+  exercicios Exercicio[]
+}
+
+model Exercicio {
+  id            Int      @id @default(autoincrement())
+  nomeExercicio String
+  series        Int
+  repeticoes    String
+  criadoEm      DateTime @default(now())
+
+  // Relação: O Exercício pertence a uma Ficha
+  ficha   FichaTreino @relation(fields: [fichaId], references: [id], onDelete: Cascade)
+  fichaId Int       // Esta é a chave estrangeira
+}
