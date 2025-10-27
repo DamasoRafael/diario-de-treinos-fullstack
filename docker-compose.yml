@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # Serviço do nosso banco de dados PostgreSQL
   db:
-    image: postgres:latest
+    image: postgres:16-alpine
     container_name: db_diario_treinos
     restart: always
     environment:
