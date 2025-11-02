@@ -30,7 +30,7 @@ function Login() {
       localStorage.setItem("token", response.data.token);
 
       // 5. Redirecionar o usuário para a página principal
-      alert("Login realizado com sucesso! (Em breve, iremos para o Dashboard)");
+      navigate('/Dashboard');
 
       // (No futuro, usara: navigate('/dashboard');)
     } catch (error) {
