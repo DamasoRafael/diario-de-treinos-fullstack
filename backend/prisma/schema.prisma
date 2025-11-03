@@ -18,8 +18,11 @@ model User {
   email     String   @unique
   senha     String
   nivel     String   @default("padrao") // "padrao" ou "admin"
-  criadoEm  DateTime @default(now())
 
+  resetToken          String? // "?" siginfica que o campo eh opcional (pode ser nulo)
+  resetTokenExpires  DateTime? // "?" siginfica que o campo eh opcional (pode ser nulo)
+
+  criadoEm  DateTime @default(now())
   // Relação: Um Usuário pode ter várias Fichas de Treino
   fichas FichaTreino[]
 }
