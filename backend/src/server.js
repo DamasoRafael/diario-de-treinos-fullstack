@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 
@@ -8,6 +10,8 @@ const prisma = new PrismaClient();
 // inicializa bcrypt
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // inicializa o express
 const app = express();
@@ -15,6 +19,16 @@ const app = express();
 // configurações do express
 app.use(cors()); // permite que o front aceda a essa API
 app.use(express.json()); //permite que esse servidor entenda JSON
+
+// Configuração nodemailer
+const transport = nodemailer.createTransport({
+  host: process.env.MAIL_HOST,
+  port: process.env.MAIL_PORT,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
+  },
+});
 
 // -- ROTAS COMEÇAM AQUI -- //
 
@@ -103,11 +117,108 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// --ROTA DE "ESQUECI MINHA SENHA" -- //
+app.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // 1. encontrar usuario pelo email
+    const usuario = await prisma.user.findUnique({ where: { email } });
+
+  if (!usuario) {
+    // nao retornar que o email nao existe, mas, sim, uma saida generica para nao dar pista para hacker
+    return res.status(200).json({ message: 'Se um usuário com este e-mail existir, um link de recuperação será enviado.' });
+  }
+
+    // 2. Gera token de reset aleatorio e seguro
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    // 3. criptografar o token antes de salvar no banco
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // 4. definir data de expiração
+    const expirationDate = new Date(Date.now() + 3600000); // 1 hora a partir de agora
+
+    //5. Salvar token criptografado e data no usuario
+    await prisma.user.update({
+      where: { email: email },
+      data: {
+        resetToken: hashedToken,
+        resetTokenExpires: expirationDate,
+      },
+    });
+
+    // 6. criar link de recuperação
+    // envia token nao criptografado
+    const resetURL = `http://localhost:3000/reset-password/${resetToken}`;
+
+    // 7. enviar email usando nodemailer (Mailtrap)
+    await transport.sendMail({
+      from: '"Diário de Treinos" <noreply@diariotreinos.com>',
+      to: email,
+      subject: 'Recuperação de Senha - Diário de Treinos',
+      html: `<p>Você solicitou uma recuperação de senha.</p>
+             <p>Clique neste link para redefinir sua senha (válido por 1 hora):</p>
+             <a href="${resetURL}">${resetURL}</a>`
+  });
+
+    res.status(200).json({ message: 'Se um usuário com este e-mail existir, um link de recuperação será enviado.' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação.' });
+  }
+});
+
+// rota para redefinir senha
+app.post('/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { senha } = req.body;
+
+  try {
+    // 1. Criptografar o token que veio da URL para o comparar com o do banco
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    // 2. Encontrar o usuário que tem este token e que não tenha expirado
+    const usuario = await prisma.user.findFirst({
+      where: {
+        resetToken: hashedToken,
+        resetTokenExpires: { gte: new Date() }, // "gte" = Maior ou igual (ou seja, não expirou)
+      },
+    });
+
+    // 3. Se o token for inválido ou tiver expirado
+    if (!usuario) {
+      return res.status(400).json({ message: 'Token de recuperação inválido ou expirado.' });
+    }
+
+    // 4. Criptografar a NOVA senha
+    const hashDaNovaSenha = await bcrypt.hash(senha, 10);
+
+    // 5. Atualizar o usuário com a nova senha e limpar os campos de reset
+    await prisma.user.update({
+      where: { id: usuario.id },
+      data: {
+        senha: hashDaNovaSenha,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
+    });
+
+    res.status(200).json({ message: 'Senha redefinida com sucesso!' });
+
+  } catch (error) {
+    console.error("### ERRO NO /reset-password: ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao redefinir a senha.' });
+  }
+});
+
+
 // --- FIM DAS ROTAS ---
 
 // inicializa o servidor na porta 3333
 const PORTA = 3333;
 app.listen(PORTA, () => {
-    console.log( 'servidor rodando na porta http://localhost:${PORTA}`' );
+    console.log( `servidor rodando na porta http://localhost:${PORTA}` );
 });
 
