@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios"; // antes precisava importar axios, mas agora ele vai navegar com a agenda api
+import api from '../services/api'
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -17,7 +18,7 @@ function Login() {
 
     try {
       // 2. "Telefonar" para o endpoint de LOGIN
-      const response = await axios.post("http://localhost:3333/login", {
+      const response = await api.post('/login', {
         email: email,
         senha: senha,
       });

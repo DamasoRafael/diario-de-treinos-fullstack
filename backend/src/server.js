@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const authMiddleware = require('./middlewares/auth');
 
 // inicializa o prisma client
 const { PrismaClient } = require('@prisma/client');
@@ -210,6 +211,31 @@ app.post('/reset-password/:token', async (req, res) => {
   } catch (error) {
     console.error("### ERRO NO /reset-password: ###", error);
     res.status(500).json({ message: 'Ocorreu um erro ao redefinir a senha.' });
+  }
+});
+
+// --- ROTAS DE FICHAS DE TREINO (SEMANA 4) ---
+// Esta eh a primeira rota *protegida*!
+
+app.get('/fichas', authMiddleware, async (req, res) => {
+  // O Express vai executar o (auth.js) priemeiro, como se fosse um seguranca.
+  // Se o token for válido, o auth.js vai chamar o next() e este código aqui sera executado.
+  // Se o token for inválido, o auth.js vai retornar o erro 401 e este código NUNCA sera executado.
+
+  try {
+    // pelo middle que colocou o id do usuario no req
+    // posso agora buscar SOMENTE as fichas que pertencem ao usuário logado.
+    const fichasDoUsuario = await prisma.fichaTreino.findMany({
+      where: {
+        usuarioId: req.userId // O ID que o middleware deu
+      }
+    });
+
+    res.status(200).json(fichasDoUsuario);
+
+  } catch (error) {
+    console.error("### ERRO NO GET /fichas: ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao buscar as fichas de treino.' });
   }
 });
 
