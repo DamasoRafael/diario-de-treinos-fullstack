@@ -1,5 +1,6 @@
 import React, { useState } from "react"; //importando useState
-import axios from "axios"; // importando axios
+// import axios from "axios"; // antes precisava importar axios, mas agora ele vai navegar com a agenda api
+import api from '../services/api'
 import { useNavigate } from "react-router-dom"; //useNavigate para redirecionar
 
 function Register() {
@@ -19,7 +20,7 @@ function Register() {
 
     try {
       // 6. "telefona" para o backend na porta 3333
-      const response = await axios.post("http://localhost:3333/usuarios", {
+      const response = await api.post('/usuarios', {
         nome: nome,
         email: email,
         senha: senha,
