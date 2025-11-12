@@ -6,8 +6,12 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // middleware
 function authMiddleware(req, res, next) {
+
+    // depuracao de erro na criacao da ficha
+     // console.log('### CABEÇALHOS RECEBIDOS PELO SEGURANÇA: ###', req.headers);
+
     // 1. o padrao eh enviar o token no cabecalho (header) da requisicao
-    const authHeader = req.headers.auhorization;
+    const authHeader = req.headers.authorization;
 
     // 2. verifica se o token foi enviado
     if (!authHeader) {

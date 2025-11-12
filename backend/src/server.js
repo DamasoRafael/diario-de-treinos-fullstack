@@ -239,6 +239,116 @@ app.get('/fichas', authMiddleware, async (req, res) => {
   }
 });
 
+// --- ROTA PARA CRIAR UMA NOVA FICHA (SEMANA 4) ---
+// (Verbo POST para /fichas)
+app.post('/fichas', authMiddleware, async (req, res) => {
+  // 1. o authMiddleware ja rodou e verificou o token e deu o req.userID
+  try {
+    // 2. pega o nome da nova ficha do corpo da requisicao
+    const { nomeFicha } = req.body;
+
+    // 3. valida se o nome foi enviado
+    if (!nomeFicha) {
+      return res.status(400).json({ message: 'O nome da ficha é obrigatório.' });
+    }
+
+    // 4. cria a nova ficha no banco de dados com prisma
+    const novaFicha = await prisma.fichaTreino.create({
+      data: {
+        nomeFicha: nomeFicha,
+        usuarioId: req.userId // conecta a ficha ao usuario logado
+      }
+    });
+
+    // 5. retorna a ficha que acabou de ser criada
+    res.status(201).json(novaFicha);
+
+  } catch (error) {
+    console.error("### ERRO NO POST /fichas: ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao criar a ficha de treino.' });
+  }
+});
+  
+// --- ROTA PARA ATUALIZAR UMA FICHA (SEMANA 4) ---
+// (Verbo PUT para /fichas/ID_DA_FICHA)
+
+app.put('/fichas/:id', authMiddleware, async (req, res) => {
+  // 1. o authMiddleware ja validou o token
+
+  try {
+    // 2. pegar o ID da ficha da url
+    const { id } = req.params;
+    // 3. pegar o novo nome da ficha do corpo de requisicao
+    const { nomeFicha } = req.body;
+
+    // 4. validar se o nome foi enviado
+    if (!nomeFicha) {
+      return res.status(400).json({ message: 'O nome da ficha é obrigatório' });
+    }
+
+    // 5. atualiza a ficha no banco
+    const fichaAtualizada = await prisma.fichaTreino.update({
+      where: {
+        id: parseInt(id), // converte o ID da URL que eh texto para numero
+        usuarioId: req.userId // garante que o usario so pode editar as proprias fichas
+      },
+      data: {
+        nomeFicha: nomeFicha
+      }
+    });
+
+    // 6. retorna a ficha que foi atualizada
+    res.status(200).json(fichaAtualizada);
+
+  }  catch (error) {
+    // Se o update falhar (ex: ficha não encontrada ou não pertence ao usuário)
+    console.error("### ERRO NO PUT /fichas/:id : ###", error);
+    res.status(404).json({ message: 'Ficha não encontrada ou não pertence a este usuário.' });
+  }
+});
+
+// --- ROTA PARA DELETAR UMA FICHA (SEMANA 4) ---
+// (Verbo DELETE para /fichas/ID_DA_FICHA)
+app.delete('/fichas/:id', authMiddleware, async (req, res) => {
+  // 1. o authMiddleware ja verificou o token
+
+  try {
+    // 2. pega o id da ficha da url
+    const { id } = req.params;
+
+  // 3. deletar a ficha do banco
+  // uso "deleteMany" pois ele permite um "where" complexo
+  // vai procurar por uma ficha que tenha esse id e pertece a esse usuario
+  const deleteResult = await prisma.fichaTreino.deleteMany({
+      where: {
+        id: parseInt(id), // pega a id da url e converte em numero
+        usuarioId: req.userId // garante que o usuário só pode deletar as proprias fichas
+      }
+    });
+
+    // 4. verifica se algo realmente foi apagado
+    // se o deleteResult.count for 0 significa que a ficha nao foi encontrada ou pertece a outro usuario
+    if (deleteResult.count === 0) {
+      return res.status(404).json({ message: 'Ficha não encontrada ou não pertence a este usuário.' });
+    }
+
+    // 5. retorna uma resposta de sucesso (mas sem conteudo)
+    res.status(204).send(); // 204 = no Content sucesso, mas não há nada para enviar de volta)
+
+    } catch (error) {
+      console.error("### ERRO NO DELETE /fichas/:id : ###", error);
+      res.status(500).json({ message: 'Ocorreu um erro ao deletar a ficha de treino.' });
+    }
+  });
+
+
+
+
+
+
+
+
+
 
 // --- FIM DAS ROTAS ---
 
