@@ -341,11 +341,169 @@ app.delete('/fichas/:id', authMiddleware, async (req, res) => {
     }
   });
 
+  // --- ROTAS DE EXERCICIOS (SEMANA 5) ---
+
+// --- ROTA PARA CRIAR UM NOVO EXERCICIO NUMA FICHA ---
+app.post('/fichas/:fichaId/exercicios', authMiddleware, async (req, res) => {
+  // 1. authMiddleware ja validou o token e deu permissao
+
+  try {
+    // 2. pega o id da ficha url
+    const { fichaId } = req.params;
+
+    // 3. pega os dados do novo exercicio do corpo de requisicao
+    const { nomeExercicio, series, repeticoes } = req.body;
+
+    // 4. valida os dados
+    if (!nomeExercicio || !series || !repeticoes) {
+      return res.status(400).json({ message: 'Todos os campos (nome, séries, repetições) são obrigatórios.' });
+    }
+
+    // 5. verifica se a ficha pertence ao usuario para nao deixar que ele adicione exercicios na ficha de outro
+    const ficha = await prisma.fichaTreino.findFirst({
+      where: {
+        id: parseInt(fichaId),
+        usuarioId: req.userId // ele eh dono da ficha?
+      }
+    });
+
+    if (!ficha) {
+      return res.status(404).json({ message: 'Ficha de treino não encontrada ou não pertence a este usuário.' });
+    }
+
+    // 6. depois dessas verificacoes, enfim os exercicios sao inseridos
+    const novoExercicio = await prisma.exercicio.create({
+      data: {
+        nomeExercicio: nomeExercicio,
+        series: parseInt(series), // garante que 'series' eh um número
+        repeticoes: repeticoes,
+        fichaId: parseInt(fichaId) // conecta o exercício na ficha
+      }
+    });
+
+    // 7. retorna exercicio criado
+    res.status(201).json(novoExercicio);
+
+  } catch (error) {
+    console.error("### ERRO NO POST /fichas/:fichaId/exercicios : ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao criar o exercício.' });
+  }
+});
+
+// --- ROTA PARA LER TODOS OS EXERCICIOS DE UMA FICHA (SEMANA 5) ---
+  app.get('/fichas/:fichaId/exercicios', authMiddleware, async (req, res) => {
+  // 1. O authMiddleware ja validou o token
+  
+  try {
+    // 2. pega o id da ficha da url
+    const { fichaId } = req.params;
+
+    // verifica se a ficha pertence ao usuario para nao deixar que ele veja exercicios na ficha de outro
+    const ficha = await prisma.fichaTreino.findFirst({
+      where: {
+        id: parseInt(fichaId),
+        usuarioId: req.userId // O usuário logado é o dono desta ficha?
+      }
+    });
+
+    if (!ficha) {
+      return res.status(404).json({ message: 'Ficha de treino não encontrada ou não pertence a este usuário.' });
+    }
+
+    // apos as vericacoes, buscar todos os exercicios que pertencem a esta ficha
+    const exercicios = await prisma.exercicio.findMany({
+      where: {
+        fichaId: parseInt(fichaId)
+      }
+    });
+
+    // 5. retorna a lista de exercicios
+    res.status(200).json(exercicios);
+
+  } catch (error) {
+    console.error("### ERRO NO GET /fichas/:fichaId/exercicios : ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao buscar os exercícios.' });
+  }
+});
+
+// --- ROTA PARA ATUALIZAR UM EXERCÍCIO (SEMANA 5) ---
+app.put('/exercicios/:id', authMiddleware, async (req, res) => {
+  // 1. O authMiddleware já validou o token 
+
+  try {
+    // 2. pega o id do exercício da url 
+    const { id } = req.params;
+    
+    // 3. pega os novos dados do corpo da requisicao
+    const { nomeExercicio, series, repeticoes } = req.body;
+
+    // verificacao para garantir que a atualizacao do exercicio so possa acontecer
+    // se a ID bater e o exercicio pertence ao usuario logado
+    const updateResult = await prisma.exercicio.updateMany({
+      where: {
+        id: parseInt(id),
+        ficha: { // verificação "aninhada"
+          usuarioId: req.userId // O usuário logado eh o dono da ficha deste exercicio?
+        }
+      },
+      data: {
+        nomeExercicio: nomeExercicio,
+        series: series ? parseInt(series) : undefined, // so atualiza se o dado foi enviado
+        repeticoes: repeticoes,
+      }
+    });
+
+    // 5. se o updateResult.count for 0, o exercicio nao foi encontrado ou nao pertencia ao usuario
+    if (updateResult.count === 0) {
+      return res.status(404).json({ message: 'Exercício não encontrado ou não pertence a este usuário.' });
+    }
+
+    // 6. se deu certo, busca o exercício atualizado para retorná-lo
+    const exercicioAtualizado = await prisma.exercicio.findUnique({
+      where: { id: parseInt(id) }
+    });
+    
+    res.status(200).json(exercicioAtualizado);
+
+  } catch (error) {
+    console.error("### ERRO NO PUT /exercicios/:id : ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao atualizar o exercício.' });
+  }
+});
 
 
+// --- ROTA PARA DELETAR UM EXERCÍCIO (SEMANA 5) ---
+app.delete('/exercicios/:id', authMiddleware, async (req, res) => {
+  // 1. O authMiddleware ja validou o token.
+  
+  try {
+    // 2. Pega o id do exercício da url
+    const { id } = req.params;
 
+    // 3. usa o 'deleteMany' para garantir que so apaga o exercício se
+    // ele pertencer a uma Ficha que pertence ao Usuário logado.
+    const deleteResult = await prisma.exercicio.deleteMany({
+      where: {
+        id: parseInt(id),
+        ficha: { // verificacao "aninhada"
+          usuarioId: req.userId // o usuario logado eh o dono da ficha deste exercício?
+        }
+      }
+    });
 
+    // 4. se o deleteResult.count for 0, o exercicio não foi encontrado ou nao pertencia ao usuario
+    if (deleteResult.count === 0) {
+      return res.status(404).json({ message: 'Exercício não encontrado ou não pertence a este usuário.' });
+    }
 
+    // 5. retorna uma resposta de sucesso (sem conteúdo)
+    res.status(204).send(); // 204 = "no Content" (sucesso, mas não ha nada para enviar de volta)
+
+  } catch (error) {
+    console.error("### ERRO NO DELETE /exercicios/:id : ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao deletar o exercício.' });
+  }
+});
 
 
 
