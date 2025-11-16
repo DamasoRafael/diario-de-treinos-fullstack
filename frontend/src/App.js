@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 
 // 2. importando novos componentes (dashboard e protectedroute)
 import Dashboard from "./pages/Dashboard";
+import FichaDetalhe from './pages/FichaDetalhe';
 import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
@@ -27,6 +28,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route 
+        path="/ficha/:id" // id diz ao react router que esta parte da url eh uma variavel
+        element={
+        <ProtectedRoute>
+          <FichaDetalhe />
+        </ProtectedRoute>
+      } 
+    />
     </Routes>
   );
 }

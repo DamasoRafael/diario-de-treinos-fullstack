@@ -1,5 +1,6 @@
 import React from 'react';
 import api from '../services/api';
+import { Link } from 'react-router-dom';
 
 // recebe a ficha inteira e duas funções (onDelete, onUpdate)
 // como "props" (propriedades) vindas do Dashboard.
@@ -49,16 +50,20 @@ function FichaCard({ ficha, onDelete, onUpdate }) {
   };
 
   return (
-    <li>
+  <li>
+    {/* O nome da ficha agora é um link clicável */}
+    <Link to={`/ficha/${ficha.id}`}>
       {ficha.nomeFicha}
-      <button onClick={handleUpdate} style={{ marginLeft: '10px' }}>
-        Editar
-      </button>
-      <button onClick={handleDelete} style={{ marginLeft: '5px' }}>
-        Apagar
-      </button>
-    </li>
-  );
+    </Link>
+
+    <button onClick={handleUpdate} style={{ marginLeft: '10px' }}>
+      Editar
+    </button>
+    <button onClick={handleDelete} style={{ marginLeft: '5px' }}>
+      Apagar
+    </button>
+  </li>
+);
 }
 
 export default FichaCard;
