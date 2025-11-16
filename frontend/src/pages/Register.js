@@ -3,6 +3,8 @@ import React, { useState } from "react"; //importando useState
 import api from '../services/api'
 import { useNavigate } from "react-router-dom"; //useNavigate para redirecionar
 
+import styles from './Register.module.css';
+
 function Register() {
   // 4. Criando bloco de notas (estados) para cada campo do formulario
   const [nome, setNome] = useState("");
@@ -48,44 +50,46 @@ function Register() {
   };
 
   return (
-    <div>
-      <h1>Página de Registro</h1>
+    // Usa styles.container
+    <div className={styles.container}>
 
-      {/* 9. O formulario */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h1>Página de Registro</h1>
+
         <div>
           <label>Nome:</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            required
+          <input 
+            type="text" 
+            value={nome} 
+            onChange={(e) => setNome(e.target.value)} 
+            required 
           />
         </div>
+
         <div>
           <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
           />
         </div>
+
         <div>
           <label>Senha:</label>
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
+          <input 
+            type="password" 
+            value={senha} 
+            onChange={(e) => setSenha(e.target.value)} 
+            required 
           />
         </div>
 
         <button type="submit">Registrar</button>
-      </form>
 
-      {/* 10. Local para mostrar a mensagem de erro */}
-      {mensagemErro && <p style={{ color: "red" }}>{mensagemErro}</p>}
+        {mensagemErro && <p className={styles.error}>{mensagemErro}</p>}
+      </form>
     </div>
   );
 }
