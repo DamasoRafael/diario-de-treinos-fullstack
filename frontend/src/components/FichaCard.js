@@ -4,6 +4,8 @@ import api from '../services/api';
 import Modal from './Modal'; 
 import { Link } from 'react-router-dom';
 
+import styles from './FichaCard.module.css';
+
 function FichaCard({ ficha, onDelete, onUpdate }) {
   
   // --- estados para os Modais ---
@@ -62,27 +64,35 @@ function FichaCard({ ficha, onDelete, onUpdate }) {
 
 
   return (
-    // react.fragment permite retornar mais de um item (<> e </>)
     <>
-      <li>
-        <Link to={`/ficha/${ficha.id}`}>
+
+      {/* A <li> agora é o "cartão" */}
+      <li className={styles.card}>
+
+        {/* o link com o nome da ficha */}
+        <Link to={`/ficha/${ficha.id}`} className={styles.cardLink}>
           {ficha.nomeFicha}
         </Link>
-        <button 
-          onClick={() => setIsEditModalOpen(true)}
-          style={{ marginLeft: '10px' }}
-        >
-          Editar
-        </button>
-        <button 
-          onClick={handleDelete} // <-- esta função agora abre o Modal de Apagar
-          style={{ marginLeft: '5px' }}
-        >
-          Apagar
-        </button>
+
+        {/* o container dos botões */}
+        <div className={styles.actions}>
+          <button 
+            onClick={() => setIsEditModalOpen(true)}
+            className={styles.editButton} // classe do botão de editar
+          >
+            Editar
+          </button>
+
+          <button 
+            onClick={handleDelete}
+            className={styles.deleteButton} // classe do botão de apagar
+          >
+            Apagar
+          </button>
+        </div>
       </li>
 
-      {/* --- Modal de Edição --- */}
+      {/* o Modal de Edição (não muda) */}
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <h2>Editar Ficha</h2>
         <form onSubmit={handleSubmitEdit}>
@@ -99,7 +109,7 @@ function FichaCard({ ficha, onDelete, onUpdate }) {
         </form>
       </Modal>
 
-      {/* --- ADIÇÃO 3: o novo Modal de "Apagar" --- */}
+      {/* o Modal de "Apagar" (não muda) */}
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
         <h2>Confirmar Exclusão</h2>
         <p>Tem a certeza que deseja apagar a ficha: "{ficha.nomeFicha}"?</p>
@@ -112,7 +122,7 @@ function FichaCard({ ficha, onDelete, onUpdate }) {
           </button>
           <button 
             onClick={handleConfirmDelete} 
-            style={{ backgroundColor: '#dc3545' }} // Cor vermelha 
+            style={{ backgroundColor: '#dc3545' }}
           >
             Sim, Apagar
           </button>

@@ -1,0 +1,74 @@
+.container {
+  width: 100%;
+}
+
+/* O cabeçalho da página */
+.header {
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+}
+
+/* O link de "Voltar" */
+.backLink {
+  display: inline-block; /* Permite aplicar margem */
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* O container para as duas seções (Adicionar e Listar) */
+.content {
+  display: flex;
+  flex-wrap: wrap; /* Em telas pequenas, as colunas ficam uma em cima da outra */
+  gap: 20px; /* Espaço entre as colunas */
+}
+
+/* Cada seção */
+.section {
+  flex: 1; /* Faz com que as duas seções tentem ter o mesmo tamanho */
+  min-width: 300px; /* Largura mínima antes de quebrar a linha */
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section h2 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* O formulário de adicionar exercício */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaço entre os 'divs' do formulário */
+}
+
+.form div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form input {
+  margin-left: 0;
+}
+
+/* A lista de exercícios */
+.exercicioList {
+  list-style-type: none; /* Remove os "pontinhos" da lista */
+  padding: 0;
+}
