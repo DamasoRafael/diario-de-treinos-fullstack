@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import api from '../services/api'
 import { useNavigate } from "react-router-dom";
 
+import styles from './Login.module.css'
+
 function Login() {
   // 1. Estados para os campos de login
   const [email, setEmail] = useState("");
@@ -51,33 +53,36 @@ function Login() {
   };
 
   return (
-    <div>
-      <h1>Página de Login</h1>
+    // Usa styles.container (o nome do arquivo + nome da classe)
+    <div className={styles.container}> 
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h1>Login</h1>
+
         <div>
           <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
           />
         </div>
+
         <div>
           <label>Senha:</label>
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
+          <input 
+            type="password" 
+            value={senha} 
+            onChange={(e) => setSenha(e.target.value)} 
+            required 
           />
         </div>
 
         <button type="submit">Entrar</button>
-      </form>
 
-      {mensagemErro && <p style={{ color: "red" }}>{mensagemErro}</p>}
+        {mensagemErro && <p className={styles.error}>{mensagemErro}</p>}
+      </form>
     </div>
   );
 }

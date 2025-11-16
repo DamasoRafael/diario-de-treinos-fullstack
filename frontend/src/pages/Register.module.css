@@ -1,0 +1,42 @@
+/* Este CSS é 99% igual ao do Login */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Ocupa 80% da altura da tela */
+}
+
+.form {
+  display: flex;
+  flex-direction: column; /* Coloca os itens um embaixo do outro */
+  gap: 15px; /* Adiciona um espaço entre os itens */
+  background: #ffffff; /* Fundo branco */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px; /* Define uma largura máxima para o formulário */
+}
+
+.form div {
+  display: flex;
+  flex-direction: column; /* Coloca a label em cima do input */
+  gap: 5px;
+}
+
+.form label {
+  font-weight: bold;
+}
+
+.form input {
+  margin-left: 0; /* Remove a margem que colocamos no global.css */
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
