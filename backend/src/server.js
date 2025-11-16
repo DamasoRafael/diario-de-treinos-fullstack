@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const authMiddleware = require('./middlewares/auth');
+const adminAuthMiddleware = require('./middlewares/adminAuth');
 
 // inicializa o prisma client
 const { PrismaClient } = require('@prisma/client');
@@ -505,6 +506,33 @@ app.delete('/exercicios/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// --- ROTA DE ADMINISTRADOR (SEMANA 5) ---
+// ess rota eh protegida por DOIS middlewares
+
+app.get('/usuarios', authMiddleware, adminAuthMiddleware, async (req, res) => {
+  // sequencia que ira rodar:
+  // 1. authMiddleware (Verifica se está logado e carimba o req.userId/req.userNivel)
+  // 2. adminAuthMiddleware (Verifica se o req.userNivel eh "admin")
+  // 3. Se ambos passarem, executa esse codigo:
+
+  try {
+    const todosOsUsuarios = await prisma.user.findMany({
+      // remover a senha das respostas por seguranca
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        nivel: true,
+        criadoEm: true
+      }
+    });
+    res.status(200).json(todosOsUsuarios);
+
+  } catch (error) {
+    console.error("### ERRO NO GET /usuarios: ###", error);
+    res.status(500).json({ message: 'Ocorreu um erro ao buscar os usuários.' });
+  }
+});
 
 
 
