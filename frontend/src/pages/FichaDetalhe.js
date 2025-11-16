@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import api from '../services/api'; 
 import ExercicioCard from '../components/ExercicioCard';
 
+import styles from './FichaDetalhe.module.css';
+
 function FichaDetalhe() {
   // 4. usa o useParams para pegar o "id" da url
   const { id } = useParams(); 
@@ -94,65 +96,70 @@ const handleUpdateExercicio = (exercicioAtualizado) => {
   }
 
   return (
-    <div>
-      <h1>Exercícios da Ficha (ID: {id})</h1>
+    <div className={styles.container}>
 
-      <Link to="/dashboard">Voltar para o Dashboard</Link>
+      <Link to="/dashboard" className={styles.backLink}>&larr; Voltar para o Dashboard</Link>
 
-      <hr />
+      <header className={styles.header}>
+        <h1>Exercícios da Ficha (ID: {id})</h1>
+      </header>
 
-      <div>
-        <h2>Adicionar Novo Exercício</h2>
-        <form onSubmit={handleCreateExercicio}>
-          <div>
-            <label>Nome:</label>
-            <input 
-              type="text"
-              value={nomeExercicio}
-              onChange={ (e) => setNomeExercicio(e.target.value) }
-              placeholder="Ex: Supino Reto"
-            />
-          </div>
-          <div>
-            <label>Séries:</label>
-            <input 
-              type="number" // tipo 'number' para facilitar
-              value={series}
-              onChange={ (e) => setSeries(e.target.value) }
-              placeholder="Ex: 4"
-            />
-          </div>
-          <div>
-            <label>Repetições:</label>
-            <input 
-              type="text"
-              value={repeticoes}
-              onChange={ (e) => setRepeticoes(e.target.value) }
-              placeholder="Ex: 10-12"
-            />
-          </div>
-          <button type="submit">Adicionar Exercício</button>
-        </form>
-      </div>
+      <main className={styles.content}>
 
-      <hr />
+        {/* Secao de Adicionar Exercicio */}
+        <section className={styles.section}>
+          <h2>Adicionar Novo Exercício</h2>
+          <form onSubmit={handleCreateExercicio} className={styles.form}>
+            <div>
+              <label>Nome:</label>
+              <input 
+                type="text"
+                value={nomeExercicio}
+                onChange={ (e) => setNomeExercicio(e.target.value) }
+                placeholder="Ex: Supino Reto"
+              />
+            </div>
+            <div>
+              <label>Séries:</label>
+              <input 
+                type="number" 
+                value={series}
+                onChange={ (e) => setSeries(e.target.value) }
+                placeholder="Ex: 4"
+              />
+            </div>
+            <div>
+              <label>Repetições:</label>
+              <input 
+                type="text"
+                value={repeticoes}
+                onChange={ (e) => setRepeticoes(e.target.value) }
+                placeholder="Ex: 10-12"
+              />
+            </div>
+            <button type="submit">Adicionar Exercício</button>
+          </form>
+        </section>
 
-      {/* Listar os exercícios */}
-      <h2>Exercícios:</h2>
-      {exercicios.length === 0 ? (
-        <p>Você ainda não tem nenhum exercício nesta ficha.</p>
-      ) : (
-        <ul>
-          {exercicios.map(exercicio => (
-            <ExercicioCard 
-              key={exercicio.id} 
-              exercicio={exercicio}
-              onDelete={handleDeleteExercicio}
-              onUpdate={handleUpdateExercicio}
-            />
-          ))}
-        </ul>
-      )}
+        {/* Secao da Lista de Exercicios */}
+        <section className={styles.section}>
+          <h2>Exercícios:</h2>
+          {exercicios.length === 0 ? (
+            <p>Você ainda não tem nenhum exercício nesta ficha.</p>
+          ) : (
+            <ul className={styles.exercicioList}>
+              {exercicios.map(exercicio => (
+                <ExercicioCard 
+                  key={exercicio.id} 
+                  exercicio={exercicio}
+                  onDelete={handleDeleteExercicio}
+                  onUpdate={handleUpdateExercicio}
+                />
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

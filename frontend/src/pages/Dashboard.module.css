@@ -1,0 +1,77 @@
+/* o container principal do Dashboard */
+.container {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* Coloca o "Bem-vindo" de um lado e o "Sair" do outro */
+  align-items: center;
+  border-bottom: 2px solid #eee; /* Uma linha cinza para separar */
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+}
+
+.logoutButton {
+  background-color: #dc3545; 
+}
+
+.logoutButton:hover {
+  background-color: #c82333;
+}
+
+/* O container para as duas seções principais */
+.content {
+  display: flex;
+  flex-wrap: wrap; /* Em telas pequenas, as colunas ficam uma em cima da outra */
+  gap: 20px; /* Espaço entre as colunas */
+}
+
+/* Cada seção (Criar Ficha e Minhas Fichas) */
+.section {
+  flex: 1; /* Faz com que as duas seções tentem ter o mesmo tamanho */
+  min-width: 300px; /* Largura mínima antes de quebrar a linha */
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section h2 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* O formulário de criar ficha */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form input {
+  margin-left: 0;
+}
+
+/* A lista de fichas */
+.fichaList {
+  list-style-type: none; /* Remove os "pontinhos" da lista */
+  padding: 0;
+}

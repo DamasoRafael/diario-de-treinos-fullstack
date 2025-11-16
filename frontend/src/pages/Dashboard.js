@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../services/api'
-import FichaCard from '../components/FichaCard'; 
+import FichaCard from '../components/FichaCard';
+
+import styles from './Dashboard.module.css';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -94,48 +96,55 @@ const handleUpdateFicha = (fichaAtualizada) => {
   }
 
   return (
-    <div>
-      <h1>Meu Diário de Treinos (Página Privada!)</h1>
-      <p>Bem-vindo! Você está logado.</p>
-      
-      <button onClick={handleLogout}>
-        Sair (Logout)
-      </button>
+    <div className={styles.container}>
 
-      <hr />
+      <header className={styles.header}>
+        <div>
+          <h1>Meu Diário de Treinos</h1>
+          <p>Bem-vindo! Você está logado.</p>
+        </div>
+        <button onClick={handleLogout} className={styles.logoutButton}>
+          Sair (Logout)
+        </button>
+      </header>
 
-      {/* --- ADIÇÃO 3: O formulário para criar a nova ficha --- */}
-      <div>
-        <h2>Criar Nova Ficha de Treino</h2>
-        <form onSubmit={handleCreateFicha}>
-          <label>Nome da Ficha:</label>
-          <input 
-            type="text"
-            value={nomeNovaFicha}
-            onChange={ (e) => setNomeNovaFicha(e.target.value) }
-          />
-          <button type="submit">Criar Ficha</button>
-        </form>
-      </div>
+      <main className={styles.content}>
 
-      <hr />
+        <section className={styles.section}>
+          <h2>Criar Nova Ficha de Treino</h2>
+          <form onSubmit={handleCreateFicha} className={styles.form}>
+            <div>
+              <label>Nome da Ficha:</label>
+              <input 
+                type="text"
+                value={nomeNovaFicha}
+                onChange={ (e) => setNomeNovaFicha(e.target.value) }
+                placeholder="Ex: Treino A - Peito e Tríceps"
+              />
+            </div>
+            <button type="submit">Criar Ficha</button>
+          </form>
+        </section>
 
-      {/* --- ADIÇÃO 4: A lista de fichas (já existia) --- */}
-      <h2>Minhas Fichas de Treino:</h2>
-      {fichas.length === 0 ? (
-        <p>Você ainda não tem nenhuma ficha de treino.</p>
-      ) : (
-        <ul>
-          {fichas.map(ficha => (
-            <FichaCard 
-             key={ficha.id} 
-             ficha={ficha} 
-             onDelete={handleDeleteFicha}
-             onUpdate={handleUpdateFicha}
-          />
-      ))} 
-    </ul>
-      )}
+        <section className={styles.section}>
+          <h2>Minhas Fichas de Treino:</h2>
+          {fichas.length === 0 ? (
+            <p>Você ainda não tem nenhuma ficha de treino.</p>
+          ) : (
+            <ul className={styles.fichaList}> 
+              {fichas.map(ficha => (
+                <FichaCard 
+                  key={ficha.id} 
+                  ficha={ficha} 
+                  onDelete={handleDeleteFicha}
+                  onUpdate={handleUpdateFicha}
+                />
+              ))}
+            </ul>
+          )}
+        </section>
+
+      </main>
     </div>
   );
 }
