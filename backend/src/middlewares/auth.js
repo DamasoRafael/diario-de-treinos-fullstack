@@ -38,6 +38,7 @@ function authMiddleware(req, res, next) {
         // anexa as informacoes do usuario na requisicao (ex: id)
         // para que a rota do CRUD saiba quem fez o pedido
         req.userId = decoded.id;
+        req.userNivel = decoded.nivel; // nivel do usuario
 
         // 6. continua para a proxima funcao
         return next();
