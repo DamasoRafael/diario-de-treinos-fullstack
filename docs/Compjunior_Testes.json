@@ -1,0 +1,399 @@
+type: collection.insomnia.rest/5.0
+name: My first collection
+meta:
+  id: wrk_6cb1156435634eafa4257793155f55a9
+  created: 1761863402541
+  modified: 1761863402541
+  description: ""
+collection:
+  - url: http://localhost:3333/usuarios
+    name: criando usuario
+    meta:
+      id: req_274e3430356e4fda9f4cae5841ec036d
+      created: 1761863402619
+      modified: 1763911576540
+      isPrivate: false
+      description: ""
+      sortKey: -1761875567040.5
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"nome": "Rafael Damaso",
+        	"email": "rafael@teste.com",
+        	"senha": "123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/login
+    name: Login Usuário
+    meta:
+      id: req_59df55c5fafd4e69aedf98afe6d8f0f6
+      created: 1761875573376
+      modified: 1763665570056
+      isPrivate: false
+      description: ""
+      sortKey: -1761875573376
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "normal@teste.com",
+        	"senha": "123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7059cd8ce49b428698bc3c274f66f729
+      - name: User-Agent
+        value: insomnia/11.6.2
+        id: pair_acf5adae2339463fa423729fb7411a8f
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/reset-password/7f70762f08cb8c9d8d3e280dc4bb90528709e2e0
+    name: nova senha
+    meta:
+      id: req_d81d96c5223d47158542e7aecbe3b710
+      created: 1762142166804
+      modified: 1763665514888
+      isPrivate: false
+      description: ""
+      sortKey: -1762142166804
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"senha": "123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas
+    name: listar fichas
+    meta:
+      id: req_f09fb907ee3f4c84b12a13f2ac286ba9
+      created: 1762142496315
+      modified: 1763665232711
+      isPrivate: false
+      description: ""
+      sortKey: -1762142496315
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.2
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2NTIyMiwiZXhwIjoxNzYzNjk0MDIyfQ.m5O2BTN_aHqL6fS9nxEhrKnPfqWXMARQsen6wVL0mEY
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas
+    name: criar ficha
+    meta:
+      id: req_12f20ae3b7e44ff8aa71e628bffeaea0
+      created: 1762976960491
+      modified: 1763665246795
+      isPrivate: false
+      description: ""
+      sortKey: -1762976960491
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"nomeFicha": "Treino AAAA - Peitossss e Triceps"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_095545f56ab14e6492a915417f23ce69
+        type: text
+        multiline: false
+      - name: User-Agent
+        value: insomnia/11.6.2
+        id: pair_176edb511ef14bfe8e72f5164c02d910
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2NTIyMiwiZXhwIjoxNzYzNjk0MDIyfQ.m5O2BTN_aHqL6fS9nxEhrKnPfqWXMARQsen6wVL0mEY
+      disabled: false
+      prefix: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas/16
+    name: editar ficha
+    meta:
+      id: req_4e93a046079b4365998a0ee82f69d75f
+      created: 1762984801880
+      modified: 1763665262668
+      isPrivate: false
+      description: ""
+      sortKey: -1762984801880
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"nomeFicha": "Treino AGGGGASVDHGVDGA - Peito e Triceps (Editado)"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.2
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2MzY5NSwiZXhwIjoxNzYzNjkyNDk1fQ.9WqtZOMk-x44kF478gnmyJgLv_yLtUJEIBJDPnojWk8
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas/16
+    name: deletar ficha
+    meta:
+      id: req_a56e48eeb9e9425db4b7922ad8796688
+      created: 1762986585799
+      modified: 1763665273548
+      isPrivate: false
+      description: ""
+      sortKey: -1762986585799
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.6.2
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2NDI2MSwiZXhwIjoxNzYzNjkzMDYxfQ.mnPF-e3YXFYhCK6J0WwPoSTrWescf7faefiDSm9Cd6c
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas/14/exercicios
+    name: criar exercicio
+    meta:
+      id: req_7419a5adf2d44c2aad42a22a8a2511ef
+      created: 1763072040445
+      modified: 1763665302063
+      isPrivate: false
+      description: ""
+      sortKey: -1763072040445
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"nomeExercicio": "Supino",
+        	"series": 4,
+        	"repeticoes": "10-12"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2NDI2MSwiZXhwIjoxNzYzNjkzMDYxfQ.mnPF-e3YXFYhCK6J0WwPoSTrWescf7faefiDSm9Cd6c
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/fichas/14/exercicios
+    name: lista exercicios da ficha
+    meta:
+      id: req_7434703949da44f48b24554fce0bc1a3
+      created: 1763073180843
+      modified: 1763665294020
+      isPrivate: false
+      description: ""
+      sortKey: -1763029313122
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2NTIyMiwiZXhwIjoxNzYzNjk0MDIyfQ.m5O2BTN_aHqL6fS9nxEhrKnPfqWXMARQsen6wVL0mEY
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/exercicios/10
+    name: editar exercicio
+    meta:
+      id: req_1acdf658c8724792b6672d480c0286af
+      created: 1763076479752
+      modified: 1763665325770
+      isPrivate: false
+      description: ""
+      sortKey: -1763076479752
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"nomeExercicio": "pulley",
+        	"series": 5
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2MzY5NSwiZXhwIjoxNzYzNjkyNDk1fQ.9WqtZOMk-x44kF478gnmyJgLv_yLtUJEIBJDPnojWk8
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/exercicios/10
+    name: deletar exercicio
+    meta:
+      id: req_09d517d0fe9947c58310d66064e0cd38
+      created: 1763077251471
+      modified: 1763665352814
+      isPrivate: false
+      description: ""
+      sortKey: -1763077251471
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibml2ZWwiOiJhZG1pbiIsImlhdCI6MTc2MzY2MzY5NSwiZXhwIjoxNzYzNjkyNDk1fQ.9WqtZOMk-x44kF478gnmyJgLv_yLtUJEIBJDPnojWk8
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/usuarios
+    name: admin - listar usuarios
+    meta:
+      id: req_decd971ad2cc443b997211bcb21fbb4a
+      created: 1763253692549
+      modified: 1763665580925
+      isPrivate: false
+      description: ""
+      sortKey: -1763253692549
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibml2ZWwiOiJwYWRyYW8iLCJpYXQiOjE3NjM2NjU1NzEsImV4cCI6MTc2MzY5NDM3MX0.viASsMwTVUtu-Mav7rXQtJ-7SN8YhmgGcK9g1cd80Ec
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3333/forgot-password
+    name: forgot password
+    meta:
+      id: req_6519aa20c1a24859bca9e05a9283bbad
+      created: 1763493807622
+      modified: 1763911614076
+      isPrivate: false
+      description: ""
+      sortKey: -1762141316877.5
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "teste@teste.com"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_d0e55a8be504bf89cd0ab0525e62625b55aa4c28
+    created: 1761863402547
+    modified: 1761863402547
+environments:
+  name: Base Environment
+  meta:
+    id: env_d0e55a8be504bf89cd0ab0525e62625b55aa4c28
+    created: 1761863402545
+    modified: 1761863402545
+    isPrivate: false
